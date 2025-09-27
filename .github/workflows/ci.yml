@@ -23,7 +23,20 @@ jobs:
         run: npm install --save-dev @commitlint/{config-conventional,cli}
       - name: Lint commits
         run: |
-          npx commitlint --from=HEAD~10 --to=HEAD --config commitlint.config.js
+          # Prefer origin/main as the base if it exists (works for pushes and PRs).
+          # Otherwise fall back to HEAD~10; if that fails, use the repo root commit.
+          set -euo pipefail
+          if git rev-parse --verify origin/main >/dev/null 2>&1; then
+            BASE=origin/main
+          else
+            BASE=HEAD~10
+          fi
+          echo "Using commit range: $BASE..HEAD"
+          if ! npx commitlint --from="$BASE" --to=HEAD --config commitlint.config.js; then
+            echo "Primary commitlint check failed; trying from first commit instead."
+            FIRST_COMMIT=$(git rev-list --max-parents=0 HEAD)
+            npx commitlint --from="$FIRST_COMMIT" --to=HEAD --config commitlint.config.js
+          fi
 
   lint:
     name: Lint
