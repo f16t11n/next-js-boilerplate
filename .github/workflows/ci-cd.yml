@@ -1,0 +1,212 @@
+name: CI-CD
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+  pull-requests: write
+
+env:
+  NODE_VERSION: '20'
+  CI: 'true'
+
+jobs:
+  commitlint:
+    name: Commit Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - name: Determine commit range
+        id: range
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "from=${{ github.event.pull_request.base.sha }}" >> $GITHUB_OUTPUT
+            echo "to=${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
+          else
+            echo "from=$(git rev-list --max-count=1 HEAD~15 || git rev-list --max-parents=0 HEAD)" >> $GITHUB_OUTPUT
+            echo "to=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          fi
+      - name: Commitlint
+        run: npx commitlint --from=${{ steps.range.outputs.from }} --to=${{ steps.range.outputs.to }} --config commitlint.config.js || echo "(Non-blocking) Commitlint skipped or failed"
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs: commitlint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npx tsc --noEmit
+
+  unit-test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test -- --coverage
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
+          retention-days: 7
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [unit-test, typecheck]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - name: Cache Next build cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+  e2e:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Start App
+        run: |
+          npm run build
+          npx next start -p 3000 & echo $! > next.pid
+          npx wait-on http://localhost:3000
+      - name: Run Playwright
+        run: npx playwright test
+      - name: Stop App
+        if: always()
+        run: kill $(cat next.pid) || true
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci --omit=dev
+      - run: npm audit --production --audit-level=high || true
+      - name: Save audit output
+        if: always()
+        run: npm audit --production --json > audit.json || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-audit
+          path: audit.json
+          retention-days: 7
+
+  cd-build:
+    name: CD Build Artifact
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: [e2e, security-audit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - name: Package artifact
+        run: tar -czf next-build.tar.gz .next package.json package-lock.json next.config.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: next-build.tar.gz
+          retention-days: 7
+
+  deploy-placeholder:
+    name: Deploy (Placeholder)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: cd-build
+    steps:
+      - run: echo "Deployment placeholder – integrate with real provider here."
+
+  smoke:
+    name: Post-Deploy Smoke
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: deploy-placeholder
+    steps:
+      - run: |
+          echo "(Placeholder) curl https://your-app.example.com/" 
+          echo "(Placeholder) curl https://your-app.example.com/api/health"
+
+  notify:
+    name: Notifications
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: [smoke]
+    steps:
+      - name: Success
+        if: success()
+        run: echo "✅ Main deployment pipeline succeeded"
+      - name: Failure
+        if: failure()
+        run: echo "❌ Main deployment pipeline failed"
