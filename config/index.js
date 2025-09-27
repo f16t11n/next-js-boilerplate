@@ -33,4 +33,6 @@ if (fs.existsSync(envPath)) {
   envConfig = require(envPath);
 }
 
-module.exports = deepMerge({ ...baseConfig }, envConfig);
+const mergedConfig = deepMerge({ ...baseConfig }, envConfig);
+mergedConfig.deepMerge = deepMerge;
+module.exports = mergedConfig;

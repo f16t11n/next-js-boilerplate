@@ -4,7 +4,7 @@ module.exports = {
   apiBaseUrl: process.env.API_URL || 'https://api.example.com',
   rateLimit: { windowMs: 15 * 60 * 1000, max: 100 },
   jwtSecret: process.env.JWT_SECRET || 'default-secret',
-  featureFlags: {},
+  featureFlags: { exampleFeature: true },
   logger: { level: 'info' },
   cors: { origin: '*', credentials: true },
   csrf: { enabled: true },

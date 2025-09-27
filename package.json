@@ -7,9 +7,9 @@
     "build": "npm run check-breakpoints && next build --turbopack",
     "check-breakpoints": "node scripts/check-breakpoints.js",
     "start": "next start",
-  "lint": "eslint",
-  "test": "jest",
-  "security": "npm audit"
+    "lint": "eslint",
+    "test": "jest",
+    "security": "npm audit"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -24,13 +24,20 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.55.1",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
+    "jest": "^30.1.3",
+    "jest-environment-jsdom": "^30.1.2",
+    "playwright": "^1.55.1",
     "tailwindcss": "^4",
+    "ts-jest": "^29.4.4",
     "typescript": "^5"
   }
 }
