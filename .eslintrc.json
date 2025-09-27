@@ -63,5 +63,36 @@
     "jsx-a11y/anchor-is-valid": ["error", { "aspects": ["invalidHref", "preferButton"] }],
     "jsx-a11y/label-has-associated-control": ["error", { "assert": "either" }],
     "jsx-a11y/no-access-key": "error"
-  }
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "coverage/",
+    ".next/",
+    "dist/",
+    "logs/"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "jest.setup.js",
+        "jest.setup.ts",
+        "setup*.js",
+        "setup*.ts",
+        "tests/**/*.js",
+        "tests/**/*.ts",
+        "**/*.test.js",
+        "**/*.test.ts",
+        "**/*.spec.js",
+        "**/*.spec.ts"
+      ],
+      "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module"
+      },
+      "rules": {
+        "@typescript-eslint/no-require-imports": "off",
+        "import/no-commonjs": "off"
+      }
+    }
+  ]
 }
