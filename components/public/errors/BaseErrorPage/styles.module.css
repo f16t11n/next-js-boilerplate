@@ -1,0 +1,129 @@
+/* Base Error Page Styles */
+.errorPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: #fafafa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.container {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.iconWrapper {
+  margin-bottom: 1.5rem;
+}
+
+.icon {
+  font-size: 4rem;
+  line-height: 1;
+  display: inline-block;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.description {
+  font-size: 1.125rem;
+  color: #6b7280;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.actionWrapper {
+  margin-top: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .errorPage {
+    padding: 1rem;
+  }
+  
+  .container {
+    padding: 2rem 1.5rem;
+  }
+  
+  .icon {
+    font-size: 3rem;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+  }
+  
+  .description {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .icon {
+    font-size: 2.5rem;
+  }
+  
+  .title {
+    font-size: 1.25rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .errorPage {
+    background-color: #111827;
+  }
+  
+  .container {
+    background: #1f2937;
+    border-color: #374151;
+  }
+  
+  .title {
+    color: #f9fafb;
+  }
+  
+  .description {
+    color: #d1d5db;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .container {
+    border: 2px solid #000;
+  }
+  
+  .title {
+    color: #000;
+  }
+  
+  .description {
+    color: #333;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .container {
+    transition: none;
+  }
+}
