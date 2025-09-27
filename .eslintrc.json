@@ -67,6 +67,8 @@
   "ignorePatterns": [
     "node_modules/",
     "coverage/",
+    "**/coverage/**",
+    "coverage/lcov-report/",
     ".next/",
     "dist/",
     "logs/"
@@ -89,6 +91,17 @@
         "ecmaVersion": 2020,
         "sourceType": "module"
       },
+      "rules": {
+        "@typescript-eslint/no-require-imports": "off",
+        "import/no-commonjs": "off"
+      }
+    }
+    ,
+    {
+      "files": [
+        "scripts/**/*.js",
+        "config/**/*.js"
+      ],
       "rules": {
         "@typescript-eslint/no-require-imports": "off",
         "import/no-commonjs": "off"

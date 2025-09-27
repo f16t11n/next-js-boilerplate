@@ -1,18 +1,14 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const fs = require('fs');
-const path = require('path');
-
-// Always load base config
+// Static environment config resolution to satisfy Turbopack (no dynamic requires)
 const baseConfig = require('./config.base');
 
-// Determine environment
 const env = process.env.NEXT_PUBLIC_ENV || process.env.NODE_ENV || 'development';
 
-
-// Deep merge utility
 function deepMerge(target, source) {
+  if (!source) return target;
   for (const key of Object.keys(source)) {
     if (
+      Object.prototype.hasOwnProperty.call(source, key) &&
       source[key] &&
       typeof source[key] === 'object' &&
       !Array.isArray(source[key]) &&
@@ -28,11 +24,30 @@ function deepMerge(target, source) {
 }
 
 let envConfig = {};
-const envPath = path.join(__dirname, `config.${env}.js`);
-if (fs.existsSync(envPath)) {
-  envConfig = require(envPath);
+switch (env) {
+  case 'production':
+    try { envConfig = require('./config.production'); } catch { /* noop */ }
+    break;
+  case 'staging':
+    try { envConfig = require('./config.staging'); } catch { /* noop */ }
+    break;
+  case 'qa':
+    try { envConfig = require('./config.qa'); } catch { /* noop */ }
+    break;
+  case 'development':
+  default:
+    try { envConfig = require('./config.development'); } catch { /* noop */ }
+    break;
 }
 
-const mergedConfig = deepMerge({ ...baseConfig }, envConfig);
+// Test-time dynamic fallback: if running under Jest (NODE_ENV begins with 'test')
+// and a config.<env>.js file exists (created ad-hoc in unit tests), attempt to load it.
+if (/^test/.test(env)) {
+  try { // eslint-disable-next-line @typescript-eslint/no-var-requires
+    envConfig = require(`./config.${env}`);
+  } catch { /* ignore if not present */ }
+}
+
+const mergedConfig = deepMerge({ ...baseConfig }, envConfig || {});
 mergedConfig.deepMerge = deepMerge;
 module.exports = mergedConfig;

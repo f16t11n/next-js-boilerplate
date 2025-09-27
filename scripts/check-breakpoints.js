@@ -1,12 +1,9 @@
-import { breakpoints } from '../config/breakpoints';
-
-/**
- * This script checks for any usage of non-standard breakpoints in the codebase.
- * It scans for px values in media queries and style code, and fails if any are not in /config/breakpoints.ts.
- */
-
-import fs from 'fs';
-import path from 'path';
+/* eslint-disable @typescript-eslint/no-require-imports */
+// CommonJS script (no ESM) to allow execution in Node without transpilation.
+// The required file is the CJS mirror (breakpoints.js) kept in sync with breakpoints.ts.
+const { breakpoints } = require('../config/breakpoints');
+const fs = require('fs');
+const path = require('path');
 
 const allowed = Object.values(breakpoints);
 const projectRoot = path.resolve(__dirname);

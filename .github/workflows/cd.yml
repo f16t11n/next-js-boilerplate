@@ -1,0 +1,63 @@
+name: CD
+
+on:
+  push:
+    branches: [main, develop]
+
+env:
+  NODE_VERSION: '20'
+  CI: 'true'
+
+jobs:
+  build-artifact:
+    name: Build Artifact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - name: Package artifact
+        run: tar -czf next-build.tar.gz .next package.json package-lock.json next.config.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: next-build.tar.gz
+          retention-days: 14
+
+  deploy-placeholder:
+    name: Deploy (Placeholder)
+    runs-on: ubuntu-latest
+    needs: build-artifact
+    steps:
+      - run: echo "Deployment placeholder – integrate real provider (Vercel/Netlify/AWS) here."
+
+  smoke:
+    name: Post-Deploy Smoke
+    runs-on: ubuntu-latest
+    needs: deploy-placeholder
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci --omit=dev=false
+      - run: npm run build
+      - name: Run smoke tests
+        run: npm run smoke
+
+  notify:
+    name: Notifications
+    runs-on: ubuntu-latest
+    needs: smoke
+    steps:
+      - name: Success
+        if: success()
+        run: echo "✅ Deployment pipeline succeeded"
+      - name: Failure
+        if: failure()
+        run: echo "❌ Deployment pipeline failed"

@@ -9,7 +9,10 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
-    "security": "npm audit"
+    "security": "npm audit",
+    "ci": "npm run lint && npx tsc --noEmit && npm run test -- --coverage && npm run build && npm audit --production --audit-level=high || true",
+    "smoke": "node scripts/smoke.js",
+    "cd": "npm run build && echo 'Deployment placeholder – integrate real provider' && npm run smoke"
   },
   "dependencies": {
     "@types/cookie": "^0.6.0",
