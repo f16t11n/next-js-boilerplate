@@ -1,9 +1,11 @@
-const { breakpoints } = require('./config/breakpoints');
+import { breakpoints } from './config/breakpoints';
 
-module.exports = {
+const tailwindConfig = {
   theme: {
     screens: breakpoints,
     // ...other theme config
   },
   // ...other Tailwind config
 };
+
+export default tailwindConfig;

@@ -6,7 +6,7 @@ import { BaseErrorPage } from '../BaseErrorPage';
 import { errorConfig } from '../../../../config/errors';
 import { ErrorPageProps } from '../BaseErrorPage/types';
 
-interface UnauthorizedProps extends Partial<ErrorPageProps> {}
+type UnauthorizedProps = Partial<ErrorPageProps>;
 
 export const Unauthorized: React.FC<UnauthorizedProps> = (props) => {
   const config = errorConfig.unauthorized;

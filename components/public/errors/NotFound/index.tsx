@@ -6,7 +6,7 @@ import { BaseErrorPage } from '../BaseErrorPage';
 import { errorConfig } from '../../../../config/errors';
 import { ErrorPageProps } from '../BaseErrorPage/types';
 
-interface NotFoundProps extends Partial<ErrorPageProps> {}
+type NotFoundProps = Partial<ErrorPageProps>;
 
 export const NotFound: React.FC<NotFoundProps> = (props) => {
   const config = errorConfig.notFound;

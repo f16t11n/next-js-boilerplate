@@ -1,12 +1,12 @@
-const { breakpoints } = require('./config/breakpoints');
+import { breakpoints } from '../config/breakpoints';
 
 /**
  * This script checks for any usage of non-standard breakpoints in the codebase.
  * It scans for px values in media queries and style code, and fails if any are not in /config/breakpoints.ts.
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 const allowed = Object.values(breakpoints);
 const projectRoot = path.resolve(__dirname);

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import config from '../../../../config';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   return NextResponse.json({ csrf: config.csrf });
 }

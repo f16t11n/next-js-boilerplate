@@ -1,4 +1,6 @@
-import Image from "next/image";
+
+// import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -13,12 +15,12 @@ export default function Home() {
           <li>Confluence-style documentation UI</li>
           <li>Production-ready security & best practices</li>
         </ul>
-        <a
+        <Link
           className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-base h-12 px-5 w-full sm:w-auto md:w-[158px]"
           href="/docs"
         >
           Go to Docs
-        </a>
+        </Link>
       </main>
     </div>
   );

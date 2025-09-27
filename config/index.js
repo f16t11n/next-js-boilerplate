@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
 const path = require('path');
 
@@ -6,7 +7,7 @@ const baseConfig = require('./config.base');
 
 // Determine environment
 const env = process.env.NEXT_PUBLIC_ENV || process.env.NODE_ENV || 'development';
-const envFile = `./config.${env}.js`;
+
 
 // Deep merge utility
 function deepMerge(target, source) {

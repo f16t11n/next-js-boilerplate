@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   try {
     const data = validate(schema, body);
     return NextResponse.json({ valid: true, data });
-  } catch (e) {
+  } catch {
     return NextResponse.json({ valid: false, error: 'Invalid input' }, { status: 400 });
   }
 }

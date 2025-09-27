@@ -6,7 +6,7 @@ import { BaseErrorPage } from '../BaseErrorPage';
 import { errorConfig } from '../../../../config/errors';
 import { ErrorPageProps } from '../BaseErrorPage/types';
 
-interface InternalErrorProps extends Partial<ErrorPageProps> {}
+type InternalErrorProps = Partial<ErrorPageProps>;
 
 export const InternalError: React.FC<InternalErrorProps> = (props) => {
   const config = errorConfig.internalError;

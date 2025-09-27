@@ -2,6 +2,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { DocsHeader } from './DocsHeader';
 import { DocsSidebar } from './DocsSidebar';
 import { DocsNavigation } from './DocsNavigation';
@@ -39,7 +40,7 @@ export const DocsLayout: React.FC<DocsLayoutProps> = ({
             <div className={styles.pageHeader}>
               {title !== 'Documentation' && (
                 <nav className={styles.breadcrumb}>
-                  <a href="/docs" className={styles.breadcrumbLink}>Documentation</a>
+                  <Link href="/docs" className={styles.breadcrumbLink}>Documentation</Link>
                   <span className={styles.breadcrumbSeparator}>›</span>
                   <span className={styles.breadcrumbCurrent}>{title}</span>
                 </nav>

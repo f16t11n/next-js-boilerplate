@@ -1,6 +1,6 @@
 import logger from './logger';
 
-export function handleCorsError(error: any) {
+export function handleCorsError(error: unknown) {
   logger.error('CORS Error:', error);
   return {
     status: 403,

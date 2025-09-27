@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import logger from '../../../lib/logger';
+import { NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   // In production, do not expose logs
   if (process.env.NODE_ENV !== 'development') {
     return NextResponse.json({ error: 'Not available in production' }, { status: 403 });

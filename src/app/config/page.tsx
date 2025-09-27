@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 const ConfigPage = () => {
-  const [config, setConfig] = useState<any>(null);
+  const [config, setConfig] = useState<Record<string, unknown> | null>(null);
   useEffect(() => {
     fetch('/api/config').then(res => res.json()).then(setConfig);
   }, []);

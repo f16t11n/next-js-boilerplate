@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import { getErrorConfigByCode, errorConfig } from '../../../../config/errors';
+import { getErrorConfigByCode } from '../../../../config/errors';
 import { BaseErrorPage } from '../../../../components/public/errors/BaseErrorPage';
 
 interface DynamicErrorProps {

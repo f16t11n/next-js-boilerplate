@@ -1,6 +1,6 @@
-const runtimeConfig = require('./config');
+import runtimeConfig from './config/index.js';
 
-module.exports = {
+const nextConfig = {
   images: {
     formats: runtimeConfig.imageConfig.formats,
     deviceSizes: runtimeConfig.imageConfig.deviceSizes,
@@ -11,3 +11,5 @@ module.exports = {
     contentSecurityPolicy: runtimeConfig.imageConfig.contentSecurityPolicy,
   },
 };
+
+export default nextConfig;

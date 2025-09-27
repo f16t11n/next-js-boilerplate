@@ -1,5 +1,6 @@
 // Documentation Main Page
 import { DocsLayout } from '../../../components/docs/DocsLayout';
+import Link from 'next/link';
 import { docsConfig } from '../../../config/docs';
 import styles from './styles.module.css';
 
@@ -45,14 +46,14 @@ export default function DocsPage() {
                   <p className={styles.categoryDescription}>{category.description}</p>
                   <div className={styles.categoryLinks}>
                     {categoryDocs.slice(0, 3).map(doc => (
-                      <a
+                      <Link
                         key={doc.id}
                         href={doc.path}
                         className={styles.categoryLink}
                       >
                         <span className={styles.categoryLinkIcon}>{doc.icon}</span>
                         <span className={styles.categoryLinkTitle}>{doc.title}</span>
-                      </a>
+                      </Link>
                     ))}
                     {categoryDocs.length > 3 && (
                       <div className={styles.categoryMore}>
@@ -76,7 +77,7 @@ export default function DocsPage() {
             Get up and running in minutes with these essential guides
           </p>
           <div className={styles.quickStartGrid}>
-            <a
+            <Link
               href="/docs/getting-started/installation"
               className={styles.quickStartCard}
             >
@@ -86,8 +87,8 @@ export default function DocsPage() {
                 <p className={styles.quickStartDesc}>Set up the boilerplate in your development environment</p>
                 <div className={styles.quickStartMeta}>5 min read</div>
               </div>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/docs/getting-started/configuration"
               className={styles.quickStartCard}
             >
@@ -97,8 +98,8 @@ export default function DocsPage() {
                 <p className={styles.quickStartDesc}>Learn about the config-driven architecture</p>
                 <div className={styles.quickStartMeta}>10 min read</div>
               </div>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/docs/components/button"
               className={styles.quickStartCard}
             >
@@ -108,7 +109,7 @@ export default function DocsPage() {
                 <p className={styles.quickStartDesc}>Explore reusable UI components and patterns</p>
                 <div className={styles.quickStartMeta}>8 min read</div>
               </div>
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -120,11 +121,11 @@ export default function DocsPage() {
           </h2>
           <div className={styles.popularGrid}>
             {docsConfig.pages.slice(0, 6).map(page => (
-              <a key={page.id} href={page.path} className={styles.popularCard}>
+              <Link key={page.id} href={page.path} className={styles.popularCard}>
                 <span className={styles.popularIcon}>{page.icon}</span>
                 <span className={styles.popularTitle}>{page.title}</span>
                 <span className={styles.popularArrow}>→</span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

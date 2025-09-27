@@ -1,4 +1,4 @@
-const { breakpoints } = require('../config/breakpoints');
+import { breakpoints } from '../config/breakpoints';
 
 const breakpointValues = Object.values(breakpoints);
 

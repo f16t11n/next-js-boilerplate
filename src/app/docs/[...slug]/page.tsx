@@ -1,5 +1,6 @@
 // Dynamic Documentation Pages Layout
 import { DocsLayout } from '../../../../components/docs/DocsLayout';
+import Link from 'next/link';
 import { docsConfig } from '../../../../config/docs';
 import { notFound } from 'next/navigation';
 
@@ -158,7 +159,7 @@ pnpm install`}</code></pre>
         </div>
 
         <div className="alert alert-success">
-          <strong>✅ Success!</strong> Your development environment is ready. Proceed to the <a href="/docs/getting-started/configuration">Configuration Guide</a>.
+          <strong>✅ Success!</strong> Your development environment is ready. Proceed to the <Link href="/docs/getting-started/configuration">Configuration Guide</Link>.
         </div>
       </div>
     ),
@@ -290,7 +291,7 @@ module.exports = {
         </div>
 
         <div className="alert alert-success">
-          <strong>✅ Next Steps:</strong> Learn about <a href="/docs/components/button">Components</a> or explore <a href="/docs/patterns/security">Security Patterns</a>.
+          <strong>✅ Next Steps:</strong> Learn about <Link href="/docs/components/button">Components</Link> or explore <Link href="/docs/patterns/security">Security Patterns</Link>.
         </div>
       </div>
     ),
