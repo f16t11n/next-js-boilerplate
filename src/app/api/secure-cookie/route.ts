@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { serialize } from 'cookie';
+import { serialize } from 'cookie'; // Requires @types/cookie in devDependencies
 import config from '../../../../config';
 
 export async function GET() {

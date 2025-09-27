@@ -1,5 +1,6 @@
 // Edge-compatible middleware utilities only. Node.js-only packages (helmet, express-rate-limit, csurf, cors, winston, path) are not supported in Edge Runtime.
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 
 // Input validation helper (Edge-compatible)
 export function validate<T>(schema: z.ZodSchema<T>, data: unknown): T {
